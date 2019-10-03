@@ -75,6 +75,8 @@ WSGI_APPLICATION = 'mydjangoproject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
+CERTIFICATE_PATH = os.path.join(BASE_DIR, 'BaltimoreCyberTrustRoot.crt.pem')
+
 # Add your database connection strings here. Comment out the SQLite DB below.
 DATABASES = {
     'default': {
@@ -83,6 +85,10 @@ DATABASES = {
         'USER': os.getenv('DATABASE_USERNAME'),
         'PASSWORD': os.getenv('DATABASE_PASSWORD'),
         'HOST': os.getenv('DATABASE_HOST'),
+        'PORT': '3306',
+        'OPTIONS': {
+            'ssl': {'ssl-ca': CERTIFICATE_PATH}
+        }
      }
 }
 
