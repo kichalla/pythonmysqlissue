@@ -18,7 +18,7 @@ jobs:
 
     - name: Install modules and zip the project files
       run: |
-        python3 -m venv antenv --copies
+        python -m venv antenv --copies
         source antenv/bin/activate
         pip install -r requirements.txt
 
