@@ -1,0 +1,33 @@
+name: Deploy a Django app to App Service
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+
+    # Set Python version (https://github.com/actions/setup-python)
+    - uses: actions/setup-python@v1
+      with:
+        python-version: '3.7.4' 
+        architecture: 'x32' # What's our bitness on Linux?
+
+    - name: Install modules and zip the project files
+      run: |
+        sudo apt-get install libmysqlclient-dev python-dev # C library for MySQL
+        python3 -m venv antenv
+        source antenv/bin/activate
+        pip install -r requirements.txt
+
+    # Finally, deploy the app to App Service (https://github.com/Azure/webapps-deploy)
+    - uses: azure/webapps-deploy@v1
+      with:
+        app-name: pythonignite2019mysql
+        publish-profile: ${{ secrets.PUBLISH_PROFILE_FOR_MYSQL_APP }}
+
+        # Startup script: 
+        # apt-get install -y gcc && pip3 install -r requirements.txt && gunicorn --bind=0.0.0.0 --timeout 600 mydjangoproject.wsgi
